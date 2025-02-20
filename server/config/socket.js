@@ -2,7 +2,7 @@ const socketIO = require("socket.io");
 const syncController = require("../controllers/syncController");
 
 const initSocket = (server) => {
-    const io = socketIO(server, { cors: true, origins: "*:*" });
+    const io = socketIO(server, { cors: true, origins: "*" },{ transports: ["websocket", "polling"],} );
 
     return new Promise((resolve) => {
         io.on("connection", (socket) => {

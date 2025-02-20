@@ -100,9 +100,11 @@ const Room = () => {
               peerConnection.current.addTrack(track, stream);
             });
 
-            socket = io("https://2a98-43-252-251-200.ngrok-free.app");
+            socket = io("https://2a98-43-252-251-200.ngrok-free.app", {
+              transports: ["websocket"],
+            });
 
-            console.log(socket)
+            console.log(socket);
 
             bindEvents();
 
