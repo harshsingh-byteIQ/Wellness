@@ -51,7 +51,7 @@ const Room = () => {
     const verifyRoom = async (password) => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/room/verify`,
+          `https://2a98-43-252-251-200.ngrok-free.app/room/verify`,
           {
             method: "POST",
             headers: {
@@ -100,7 +100,7 @@ const Room = () => {
               peerConnection.current.addTrack(track, stream);
             });
 
-            socket = io(import.meta.env.VITE_API_URL);
+            socket = io("https://2a98-43-252-251-200.ngrok-free.app");
 
             console.log(socket)
 

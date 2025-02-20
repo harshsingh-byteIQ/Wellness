@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post("/create", roomValidationRules, validateRequest, createRoom);
 router.post("/verify", roomValidationRules, validateRequest, verifyRoom);
-router.get("hey", (req,res) => {
-    return {"hey":"BE"}
+router.get("/hey", (req,res) => {
+    res.status(200).json({ status: true, message: "Room verified" })
 })
 
 module.exports = router;

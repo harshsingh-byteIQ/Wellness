@@ -23,7 +23,7 @@ const Home = () => {
             setPasswordError("");
             setCreateRoomLoading(true);
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/room/create`, {
+            const response = await fetch(`https://2a98-43-252-251-200.ngrok-free.app/room/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const Home = () => {
             setPasswordError("");
             setJoinRoomLoading(true);
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/room/verify`, {
+            const response = await fetch(`https://2a98-43-252-251-200.ngrok-free.app/room/verify`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
