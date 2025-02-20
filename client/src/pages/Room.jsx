@@ -102,6 +102,8 @@ const Room = () => {
 
             socket = io(import.meta.env.VITE_API_URL);
 
+            console.log(socket)
+
             bindEvents();
 
             socket.emit("join-room", { roomCode, password, userId });

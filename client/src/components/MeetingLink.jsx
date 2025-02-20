@@ -4,7 +4,7 @@ import { toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MeetingLink = ({ roomCode }) => {
-    console.log(typeof window.location.origin);
+    
     const link = `${window.location.origin}/room/${roomCode}?password=${btoa(localStorage.getItem("password"))}`;
 
     const handleCopy = () => {
