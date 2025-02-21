@@ -16,6 +16,7 @@ const Room = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const divRef = useRef(null);
 
   const { roomCode } = useParams();
 
@@ -23,6 +24,9 @@ const Room = () => {
   const [videoStream, setVideoStream] = useState(null);
   const [videoStreamHasVideo, setVideoStreamHasVideo] = useState(false);
   const [videoStreamHasAudio, setVideoStreamHasAudio] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const mediaRecorderRef = useRef(null);
 
   // Peer Video Stream
   const [peerVideoStream, setPeerVideoStream] = useState(null);
@@ -156,6 +160,31 @@ const Room = () => {
     return localStorage.getItem("password") ?? null;
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { mediaSource: "screen" },
+        audio: true, 
+      });
+
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "video/webm",
+      });
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          setRecordedChunks((prev) => [...prev, event.data]);
+        }
+      };
+
+      mediaRecorder.start();
+      mediaRecorderRef.current = mediaRecorder;
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+    }
+  };
+  
   const bindEvents = () => {
     socket.on("user-connected", () => {
       peerConnection.current.createOffer().then((offer) => {
@@ -264,8 +293,32 @@ const Room = () => {
   // End Call Handler
   const handleEndCall = () => {
     unbindEvents();
+    peerConnection.current.close();
+    if (videoStream) {
+      videoStream.getTracks().forEach((track) => track.stop());
+    }
     localStorage.removeItem("password");
+    socket.disconnect();
     navigate("/");
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const downloadRecording = () => {
+    if (recordedChunks.length === 0) return;
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recording.webm";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   if (isLoading) return <FullPageLoader />;
@@ -273,12 +326,37 @@ const Room = () => {
   if (error) return <FullPageError error={error} />;
 
   return (
-    <div className="h-screen h-dvh relative">
+    <div ref={divRef} className="h-screen h-dvh relative">
       <div className="absolute top-4 right-4 z-50 bg-black p-2 rounded-full shadow-lg cursor-pointer">
         <img
           style={{ borderRadius: "10vh", height: "10vh", width: "15vw" }}
           src={img}
         ></img>
+      </div>
+      <div className="absolute top-20 right-6 z-50 bg-black p-2 rounded-full shadow-lg cursor-pointer">
+        {!isRecording ? (
+          <button
+            onClick={startRecording}
+            className="bg-red-500 text-white p-2 rounded"
+          >
+            Start Recording
+          </button>
+        ) : (
+          <button
+            onClick={stopRecording}
+            className="bg-gray-500 text-white p-2 rounded"
+          >
+            Stop Recording
+          </button>
+        )}
+        {recordedChunks.length > 0 && (
+          <button
+            onClick={downloadRecording}
+            className="bg-green-500 text-white p-2 rounded"
+          >
+            Download Recording
+          </button>
+        )}
       </div>
 
       <div className="h-full w-full">
