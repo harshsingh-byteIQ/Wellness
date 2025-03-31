@@ -23,7 +23,7 @@ const Home = () => {
             setPasswordError("");
             setCreateRoomLoading(true);
 
-            const response = await fetch(`https://9da7-45-114-50-40.ngrok-free.app/room/create`, {
+            const response = await fetch(`https://a40e-2405-201-a007-73-e860-f705-b5a3-3ce.ngrok-free.app/room/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const Home = () => {
             setPasswordError("");
             setJoinRoomLoading(true);
 
-            const response = await fetch(`https://9da7-45-114-50-40.ngrok-free.app/room/verify`, {
+            const response = await fetch(`https://a40e-2405-201-a007-73-e860-f705-b5a3-3ce.ngrok-free.app/room/verify`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

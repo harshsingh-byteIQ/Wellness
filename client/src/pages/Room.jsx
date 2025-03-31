@@ -55,7 +55,7 @@ const Room = () => {
     const verifyRoom = async (password) => {
       try {
         const response = await fetch(
-          `https://9da7-45-114-50-40.ngrok-free.app/room/verify`,
+          `https://a40e-2405-201-a007-73-e860-f705-b5a3-3ce.ngrok-free.app/room/verify`,
           {
             method: "POST",
             headers: {
@@ -104,7 +104,7 @@ const Room = () => {
               peerConnection.current.addTrack(track, stream);
             });
 
-            socket = io("https://9da7-45-114-50-40.ngrok-free.app", {
+            socket = io("https://a40e-2405-201-a007-73-e860-f705-b5a3-3ce.ngrok-free.app", {
               transports: ["websocket"],
             });
 
